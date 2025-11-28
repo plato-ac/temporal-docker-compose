@@ -41,6 +41,7 @@ services:
       - POSTGRES_PWD=temporal
       - POSTGRES_SEEDS=postgresql
       - ENABLE_ES=true
+      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
       - ES_SEEDS=elasticsearch
       - ES_VERSION=v7
       - TEMPORAL_ADDRESS=temporal:7233
@@ -51,7 +52,7 @@ services:
     ports:
       - 7233:7233
     volumes:
-      - ./dynamicconfig:/etc/temporal/config/dynamicconfig
+      - ./dynamicconfig:/app/config/dynamicconfig
   temporal-admin-tools:
     container_name: temporal-admin-tools
     depends_on:
