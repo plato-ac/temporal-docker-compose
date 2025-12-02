@@ -2,6 +2,8 @@ version: "3.5"
 services:
   elasticsearch:
     container_name: temporal-elasticsearch
+    networks:
+      - dokploy-network
     environment:
       - cluster.routing.allocation.disk.threshold_enabled=true
       - cluster.routing.allocation.disk.watermark.low=512mb
@@ -17,6 +19,8 @@ services:
       - /var/lib/elasticsearch/data
   postgresql:
     container_name: temporal-postgresql
+    networks:
+      - dokploy-network
     environment:
       POSTGRES_PASSWORD: temporal
       POSTGRES_USER: temporal
@@ -27,6 +31,8 @@ services:
       - /var/lib/postgresql/data
   temporal:
     container_name: temporal
+    networks:
+      - dokploy-network
     depends_on:
       - postgresql
       - elasticsearch
@@ -49,6 +55,8 @@ services:
       - ./dynamicconfig:/app/config/dynamicconfig
   temporal-admin-tools:
     container_name: temporal-admin-tools
+    networks:
+      - dokploy-network
     depends_on:
       - temporal
     environment:
@@ -59,6 +67,8 @@ services:
     tty: true
   temporal-ui:
     container_name: temporal-ui
+    networks:
+      - dokploy-network
     depends_on:
       - temporal
     environment:
@@ -67,3 +77,7 @@ services:
     image: temporalio/ui:${TEMPORAL_UI_VERSION}
     ports:
       - 8888:8080
+
+networks:
+  dokploy-network:
+    external: true
